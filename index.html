@@ -3,11 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>//:>rlyles/start</title>
-    <link rel="icon" type="image/x-icon" href="/git/favicon.ico">
+    <title>Dev //:>home</title>
+    <link rel="icon" type="image/x-icon" href="/fav.ico">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+    <style>
+        /* Search box styles */
+        #search-container {
+            margin-bottom: 20px;
+            padding: 0 15px;
+        }
+        
+        #search-form {
+            width: 100%;
+        }
+        
+        #search-box {
+            width: 100%;
+            padding: 12px 15px;
+            font-family: 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
+            font-size: 1rem;
+            color: var(--text-primary);
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        #search-box:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -17,10 +46,11 @@
         </div>
     </header>
 
+    <!-- Search container - added directly to HTML -->
     <div id="search-container">
-    <form id="search-form" onsubmit="return performSearch()">
-        <input type="text" id="search-box" placeholder="Search..." autofocus>
-    </form>
+        <form id="search-form" onsubmit="return doSearch()">
+            <input type="text" id="search-box" placeholder="Search..." autocomplete="off" autocorrect="off" autocapitalize="off">
+        </form>
     </div>
 
     <main id="bookmark-container">
@@ -33,6 +63,51 @@
         </div>
     </footer>
 
+    <script>
+        // Define search function in global scope
+        function doSearch() {
+            const query = document.getElementById('search-box').value.trim();
+            if (query) {
+                window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+                document.getElementById('search-box').value = '';
+            }
+            return false; // Prevent form submission
+        }
+    </script>
+    
     <script src="script.js"></script>
+    
+    <script>
+        // Multiple approaches to ensure focus works on mobile
+        document.addEventListener('DOMContentLoaded', function() {
+            // Try to focus immediately
+            document.getElementById('search-box').focus();
+            
+            // Try again after a short delay
+            setTimeout(function() {
+                document.getElementById('search-box').focus();
+            }, 500);
+            
+            // Try again after a longer delay
+            setTimeout(function() {
+                document.getElementById('search-box').focus();
+            }, 1000);
+            
+            // Focus on first user interaction (for iOS)
+            document.addEventListener('touchstart', function focusOnTouch() {
+                document.getElementById('search-box').focus();
+                document.removeEventListener('touchstart', focusOnTouch);
+            }, { passive: true });
+            
+            // Focus when visibility changes (user returns to tab)
+            document.addEventListener('visibilitychange', function() {
+                if (document.visibilityState === 'visible') {
+                    setTimeout(function() {
+                        document.getElementById('search-box').focus();
+                    }, 100);
+                }
+            });
+        });
+    </script>
 </body>
 </html>
