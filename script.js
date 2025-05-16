@@ -256,7 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
     window.performSearch = function() {
         const query = document.getElementById('search-box').value.trim();
         if (query) {
-            window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+            window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
             document.getElementById('search-box').value = '';
         }
         return false; // Prevent form submission
