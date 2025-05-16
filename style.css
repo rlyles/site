@@ -195,3 +195,30 @@ footer {
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 8px;
 }
+
+#search-container {
+    margin-bottom: 20px;
+    padding: 0 15px;
+}
+
+#search-form {
+    width: 100%;
+}
+
+#search-box {
+    width: 100%;
+    padding: 12px 15px;
+    font-family: 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
+    font-size: 1rem;
+    color: var(--text-primary);
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#search-box:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+}

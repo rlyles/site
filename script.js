@@ -12,6 +12,23 @@ document.addEventListener('DOMContentLoaded', function() {
             welcomeMsg.textContent = 'Good Evening:';
         }
     }
+
+    // Search functionality
+function performSearch() {
+    const query = document.getElementById('search-box').value.trim().toLowerCase();
+    if (!query) return false;
+    
+    // Default to Google search
+    window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+    
+    // Clear the search box after search
+    document.getElementById('search-box').value = '';
+    
+    return false; // Prevent form submission
+}
+
+// Ensure search box gets focus when page loads
+document.getElementById('search-box').focus();
     
     // Update date and time
     function updateDateTime() {
