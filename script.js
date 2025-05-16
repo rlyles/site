@@ -12,23 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
             welcomeMsg.textContent = 'Good Evening:';
         }
     }
-
-    // Search functionality
-function performSearch() {
-    const query = document.getElementById('search-box').value.trim().toLowerCase();
-    if (!query) return false;
-    
-    // Default to Google search
-    window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
-    
-    // Clear the search box after search
-    document.getElementById('search-box').value = '';
-    
-    return false; // Prevent form submission
-}
-
-// Ensure search box gets focus when page loads
-document.getElementById('search-box').focus();
     
     // Update date and time
     function updateDateTime() {
@@ -197,4 +180,119 @@ document.getElementById('search-box').focus();
     
     // Initialize bookmarks
     renderBookmarks();
+    
+    // Add search box to the page
+    function addSearchBox() {
+        const header = document.querySelector('header');
+        
+        // Create search container
+        const searchContainer = document.createElement('div');
+        searchContainer.id = 'search-container';
+        
+        // Create search form
+        const searchForm = document.createElement('form');
+        searchForm.id = 'search-form';
+        searchForm.onsubmit = function() { return performSearch(); };
+        
+        // Create search input
+        const searchInput = document.createElement('input');
+        searchInput.type = 'text';
+        searchInput.id = 'search-box';
+        searchInput.placeholder = 'Search...';
+        searchInput.autocomplete = 'off';
+        searchInput.autocapitalize = 'off';
+        searchInput.autocorrect = 'off';
+        searchInput.autofocus = true;
+        
+        // Append elements
+        searchForm.appendChild(searchInput);
+        searchContainer.appendChild(searchForm);
+        
+        // Insert after header
+        header.parentNode.insertBefore(searchContainer, header.nextSibling);
+        
+        // Add CSS for search box
+        const style = document.createElement('style');
+        style.textContent = `
+            #search-container {
+                margin-bottom: 20px;
+                padding: 0 15px;
+            }
+            
+            #search-form {
+                width: 100%;
+            }
+            
+            #search-box {
+                width: 100%;
+                padding: 12px 15px;
+                font-family: 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
+                font-size: 1rem;
+                color: var(--text-primary);
+                background-color: var(--bg-secondary);
+                border: 1px solid var(--border-color);
+                border-radius: 6px;
+                outline: none;
+                transition: border-color 0.2s, box-shadow 0.2s;
+            }
+            
+            #search-box:focus {
+                border-color: var(--accent-color);
+                box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Focus the search box
+        setTimeout(function() {
+            searchInput.focus();
+        }, 100);
+    }
+    
+    // Add the search box
+    addSearchBox();
+    
+    // Define the performSearch function
+    window.performSearch = function() {
+        const query = document.getElementById('search-box').value.trim();
+        if (query) {
+            window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+            document.getElementById('search-box').value = '';
+        }
+        return false; // Prevent form submission
+    };
+    
+    // Add event listener for the Enter key
+    document.getElementById('search-box').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            performSearch();
+        }
+    });
+    
+    // Force focus on mobile devices
+    function forceFocus() {
+        const searchBox = document.getElementById('search-box');
+        if (searchBox) {
+            searchBox.focus();
+            // For iOS devices
+            searchBox.blur();
+            searchBox.focus();
+        }
+    }
+    
+    // Call forceFocus on page load and after a short delay
+    forceFocus();
+    setTimeout(forceFocus, 500);
+    
+    // Also try to focus on visibility change (when user returns to the tab)
+    document.addEventListener('visibilitychange', function() {
+        if (document.visibilityState === 'visible') {
+            setTimeout(forceFocus, 100);
+        }
+    });
+    
+    // Add touch event listener for mobile devices
+    document.addEventListener('touchstart', function() {
+        setTimeout(forceFocus, 100);
+    }, { once: true });
 });
